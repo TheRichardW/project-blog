@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 
 import BlogHero from "@/components/BlogHero";
 
@@ -7,6 +7,7 @@ import { loadBlogPost } from "@/helpers/file-helpers";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Spinner from "@/components/Spinner";
 import CodeSnippet from "@/components/CodeSnippet";
+const DivisionGroupsDemo = lazy(() => import("@/components/DivisionGroupsDemo"))
 
 export async function generateMetadata({ params }) {
   const blogPost = await loadBlogPost(params.postSlug);
@@ -25,7 +26,8 @@ async function BlogPost({ params }) {
       <div className={styles.page}>
         <Suspense fallback={<Spinner />}>
           <MDXRemote source={blogPost.content} components={{
-            pre: CodeSnippet
+            pre: CodeSnippet,
+            DivisionGroupsDemo
           }} />
         </Suspense>
       </div>

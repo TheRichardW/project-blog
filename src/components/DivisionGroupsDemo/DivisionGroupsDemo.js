@@ -9,6 +9,8 @@ import SliderControl from '@/components/SliderControl';
 import Equation from './Equation';
 import styles from './DivisionGroupsDemo.module.css';
 
+import { motion } from 'framer-motion';
+
 function DivisionGroupsDemo({
   numOfItems = 12,
   initialNumOfGroups = 1,
@@ -60,16 +62,21 @@ function DivisionGroupsDemo({
           style={gridStructure}
         >
           {range(numOfGroups).map((groupIndex) => (
-            <div key={groupIndex} className={styles.group}>
+            <motion.div key={groupIndex} className={styles.group} transition={{
+              type: 'spring',
+              stiffness: 200,
+              damping: 40
+            }}>
               {range(numOfItemsPerGroup).map((index) => {
                 return (
-                  <div
+                  <motion.div
+                    layout="position"
                     key={index}
                     className={styles.item}
                   />
                 );
               })}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
