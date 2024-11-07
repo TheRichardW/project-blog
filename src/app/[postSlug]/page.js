@@ -6,6 +6,7 @@ import styles from "./postSlug.module.css";
 import { loadBlogPost } from "@/helpers/file-helpers";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Spinner from "@/components/Spinner";
+import CodeSnippet from "@/components/CodeSnippet";
 
 export async function generateMetadata({ params }) {
   const blogPost = await loadBlogPost(params.postSlug);
@@ -23,8 +24,9 @@ async function BlogPost({ params }) {
       <BlogHero title={blogPost.frontmatter.title} publishedOn={blogPost.frontmatter.publishedOn} />
       <div className={styles.page}>
         <Suspense fallback={<Spinner />}>
-          <MDXRemote source={blogPost.content} />
-          {/* {blogPost.content} */}
+          <MDXRemote source={blogPost.content} components={{
+            pre: CodeSnippet
+          }} />
         </Suspense>
       </div>
     </article>
