@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 
 import { range } from '@/utils';
@@ -16,6 +16,10 @@ function DivisionGroupsDemo({
   initialNumOfGroups = 1,
   includeRemainderArea,
 }) {
+  const [ids] = useState(() => range(numOfItems).map(() => 
+    crypto.randomUUID(),
+  ));
+
   const [numOfGroups, setNumOfGroups] = React.useState(
     initialNumOfGroups
   );
@@ -62,21 +66,19 @@ function DivisionGroupsDemo({
           style={gridStructure}
         >
           {range(numOfGroups).map((groupIndex) => (
-            <motion.div key={groupIndex} className={styles.group} transition={{
-              type: 'spring',
-              stiffness: 200,
-              damping: 40
-            }}>
+            <div key={groupIndex} className={styles.group}>
               {range(numOfItemsPerGroup).map((index) => {
+                const id = ids[(groupIndex * numOfItemsPerGroup) + index]
                 return (
                   <motion.div
                     layout="position"
-                    key={index}
+                    layoutId={id}
+                    key={id}
                     className={styles.item}
                   />
                 );
               })}
-            </motion.div>
+              </div>
           ))}
         </div>
       </div>
@@ -88,8 +90,13 @@ function DivisionGroupsDemo({
           </p>
 
           {range(remainder).map((index) => {
+            const layoutId = ids[ids.length - index - 1];
             return (
-              <div key={index} className={styles.item} />
+              <motion.div 
+                layout="position" 
+                layoutId={layoutId} 
+                key={layoutId} 
+                className={styles.item} />
             );
           })}
         </div>
@@ -105,3 +112,9 @@ function DivisionGroupsDemo({
 }
 
 export default DivisionGroupsDemo;
+
+//transition={{
+//   type: 'spring',
+//   stiffness: 200,
+//   damping: 40
+// }}
