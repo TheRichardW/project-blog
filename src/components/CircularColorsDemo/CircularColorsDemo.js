@@ -1,10 +1,12 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import {
   Play,
   Pause,
   RotateCcw,
 } from 'react-feather';
+import { motion } from 'framer-motion';
 
 import Card from '@/components/Card';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -18,12 +20,31 @@ const COLORS = [
 ];
 
 function CircularColorsDemo() {
-  // TODO: This value should increase by 1 every second:
-  const timeElapsed = 0;
+  const [counting, setCounting] = useState(false);
+  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [timer, setTimer] = useState(null);
 
-  // TODO: This value should cycle through the colors in the
-  // COLORS array:
-  const selectedColor = COLORS[0];
+  function handlePlayPause() {
+    setCounting(!counting);
+    if (!counting) {
+      const interval = setInterval(() => {
+        setTimeElapsed((oldCount) => oldCount + 1);
+      }, 1000);
+      setTimer(interval);
+    } else {
+      clearInterval(timer);
+      setTimer(null);
+    }
+  }
+
+  function handleReset() {
+    clearInterval(timer);
+    setTimer(null);
+    setCounting(false);
+    setTimeElapsed(0);
+  }
+
+  const selectedColor = COLORS[timeElapsed % 3];
 
   return (
     <Card as="section" className={styles.wrapper}>
@@ -38,10 +59,13 @@ function CircularColorsDemo() {
               key={index}
             >
               {isSelected && (
-                <div
+                <motion.div
+                  layoutId='selectedBorder'
+                  layout="position"
                   className={
                     styles.selectedColorOutline
                   }
+                  style={{zIndex: 1}}
                 />
               )}
               <div
@@ -69,11 +93,11 @@ function CircularColorsDemo() {
           <dd>{timeElapsed}</dd>
         </dl>
         <div className={styles.actions}>
-          <button>
-            <Play />
+          <button onClick={handlePlayPause}>
+            {!counting ? <Play /> : <Pause />}
             <VisuallyHidden>Play</VisuallyHidden>
           </button>
-          <button>
+          <button onClick={handleReset}>
             <RotateCcw />
             <VisuallyHidden>Reset</VisuallyHidden>
           </button>

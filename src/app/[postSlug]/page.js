@@ -9,6 +9,7 @@ import Spinner from "@/components/Spinner";
 import CodeSnippet from "@/components/CodeSnippet";
 import RespectMotionPreferences from "@/components/RespectMotionPreferences";
 const DivisionGroupsDemo = lazy(() => import("@/components/DivisionGroupsDemo"))
+const CircularColorsDemo = lazy(() => import("@/components/CircularColorsDemo"))
 
 export async function generateMetadata({ params }) {
   const blogPost = await loadBlogPost(params.postSlug);
@@ -29,7 +30,8 @@ async function BlogPost({ params }) {
           <Suspense fallback={<Spinner />}>
             <MDXRemote source={blogPost.content} components={{
               pre: CodeSnippet,
-              DivisionGroupsDemo
+              DivisionGroupsDemo,
+              CircularColorsDemo
             }} />
           </Suspense>
         </RespectMotionPreferences>
